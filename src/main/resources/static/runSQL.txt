@@ -1,0 +1,2 @@
+INSERT INTO `coupon_manager`.`role` (`i_id`, `c_role_name`) VALUES ('1', 'PREMIUM');
+INSERT INTO `coupon_manager`.`customer` (`i_id`, `i_role_id`, `c_email`, `c_first_name`, `c_first_time_user`, `c_last_name`, `c_trial`, `x_city`, `x_contact`, `x_country`, `x_logon_add`) VALUES ('1', '1', '@gmail.com', 'Nitesh', 'Y', 'Pednekar', 'Y', 'Mumbai', '123', 'India', 'System');
