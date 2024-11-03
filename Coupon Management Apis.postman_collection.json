@@ -1,0 +1,323 @@
+{
+	"info": {
+		"_postman_id": "e1ecd343-2c98-4cc8-9123-8f829312e16b",
+		"name": "Coupon Management Apis",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "39453478"
+	},
+	"item": [
+		{
+			"name": "Create Coupon Requests",
+			"item": [
+				{
+					"name": "createCoupon(All Comb)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"code\": \"FLAT50\",\r\n    \"type\": \"Cart-wise\",\r\n    \"conditon\": {\r\n        \"discountType\": 1,\r\n        \"discount\": 50,\r\n        \"discMax\": 50,\r\n        \"bxgy\": {\r\n            \"buy\": [\r\n                {\r\n                    \"name\": \"iphone\",\r\n                    \"quantity\": 1\r\n                }\r\n            ],\r\n            \"get\": [\r\n                {\r\n                    \"name\": \"airpods\",\r\n                    \"quantity\": 1\r\n                }\r\n            ]\r\n        },\r\n        \"productWise\": {\r\n            \"name\": \"iphone\",\r\n            \"discType\": 1,\r\n            \"discount\": 10\r\n        }\r\n    },\r\n    \"from\": \"2024-11-02\",\r\n    \"to\": \"2024-11-03\",\r\n    \"usageLimit\": 100,\r\n    \"perUserLimit\": 2,\r\n    \"logonAdd\": \"Nitesh\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/coupons",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"coupons"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "createCoupon(CARTWISE)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\":1,\r\n    \"code\": \"FLAT50\",\r\n    \"type\": \"Cart-wise\",\r\n    \"conditon\": {\r\n        \"discountType\": 1,\r\n        \"discount\": 50,\r\n        \"discMax\": 50\r\n        \r\n    },\r\n    \"from\": \"2024-11-02\",\r\n    \"to\": \"2024-11-03\",\r\n    \"usageLimit\": 100,\r\n    \"perUserLimit\": 2,\r\n    \"logonAdd\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/coupons",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"coupons"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "createCoupon(BOGO)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"code\": \"FLAT50\",\r\n    \"type\": \"Cart-wise\",\r\n    \"conditon\": {\r\n        \r\n        \"bxgy\": {\r\n            \"buy\": [\r\n                {\r\n                    \"name\": \"iphone\",\r\n                    \"quantity\": 1\r\n                }\r\n            ],\r\n            \"get\": [\r\n                {\r\n                    \"name\": \"airpods\",\r\n                    \"quantity\": 1\r\n                }\r\n            ]\r\n        }\r\n    },\r\n    \"from\": \"2024-11-02\",\r\n    \"to\": \"2024-11-03\",\r\n    \"usageLimit\": 100,\r\n    \"perUserLimit\": 2,\r\n    \"logonAdd\": \"Nitesh\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/coupons",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"coupons"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "createCoupon(PRODUCT)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"code\": \"FLAT50\",\r\n    \"type\": \"Cart-wise\",\r\n    \"conditon\": {\r\n        \"productWise\": {\r\n            \"name\": \"iphone\",\r\n            \"discType\": 1,\r\n            \"discount\": 10\r\n        }\r\n    },\r\n    \"from\": \"2024-11-02\",\r\n    \"to\": \"2024-11-03\",\r\n    \"usageLimit\": 100,\r\n    \"perUserLimit\": 2,\r\n    \"logonAdd\": \"Nitesh\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/coupons",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"coupons"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "These apis are used to create the coupons  \nTypes could be CARTWISE,PRODUCTWISE,BOGOWISE.  \nYou can add more types by changing the type variable .  \nif that type is not avialable it would be newly added"
+		},
+		{
+			"name": "Get Coupon Requests",
+			"item": [
+				{
+					"name": "getAllCoupons",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/coupons",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"coupons"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getCouponById",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/coupons/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"coupons",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Delete Coupon Requests",
+			"item": [
+				{
+					"name": "DeleteById",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Update Coupon Requests",
+			"item": [
+				{
+					"name": "createCoupon(All Comb)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"code\": \"FLAT50\",\r\n    \"type\": \"Cart-wise\",\r\n    \"conditon\": {\r\n        \"discountType\": 1,\r\n        \"discount\": 50,\r\n        \"discMax\": 50,\r\n        \"bxgy\": {\r\n            \"buy\": [\r\n                {\r\n                    \"name\": \"iphone\",\r\n                    \"quantity\": 1\r\n                }\r\n            ],\r\n            \"get\": [\r\n                {\r\n                    \"name\": \"airpods\",\r\n                    \"quantity\": 1\r\n                }\r\n            ]\r\n        },\r\n        \"productWise\": {\r\n            \"name\": \"iphone\",\r\n            \"discType\": 1,\r\n            \"discount\": 10\r\n        }\r\n    },\r\n    \"from\": \"2024-11-02\",\r\n    \"to\": \"2024-11-03\",\r\n    \"usageLimit\": 100,\r\n    \"perUserLimit\": 2,\r\n    \"logonAdd\": \"Nitesh\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/coupons",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"coupons"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "createCoupon(CARTWISE)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\":1,\r\n    \"code\": \"FLAT50\",\r\n    \"type\": \"Cart-wise\",\r\n    \"conditon\": {\r\n        \"discountType\": 1,\r\n        \"discount\": 50,\r\n        \"discMax\": 50\r\n        \r\n    },\r\n    \"from\": \"2024-11-02\",\r\n    \"to\": \"2024-11-03\",\r\n    \"usageLimit\": 100,\r\n    \"perUserLimit\": 2,\r\n    \"logonAdd\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/coupons",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"coupons"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "createCoupon(BOGO)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"code\": \"FLAT50\",\r\n    \"type\": \"Cart-wise\",\r\n    \"conditon\": {\r\n        \r\n        \"bxgy\": {\r\n            \"buy\": [\r\n                {\r\n                    \"name\": \"iphone\",\r\n                    \"quantity\": 1\r\n                }\r\n            ],\r\n            \"get\": [\r\n                {\r\n                    \"name\": \"airpods\",\r\n                    \"quantity\": 1\r\n                }\r\n            ]\r\n        }\r\n    },\r\n    \"from\": \"2024-11-02\",\r\n    \"to\": \"2024-11-03\",\r\n    \"usageLimit\": 100,\r\n    \"perUserLimit\": 2,\r\n    \"logonAdd\": \"Nitesh\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/coupons",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"coupons"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "createCoupon(PRODUCT)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"code\": \"FLAT50\",\r\n    \"type\": \"Cart-wise\",\r\n    \"conditon\": {\r\n        \"productWise\": {\r\n            \"name\": \"iphone\",\r\n            \"discType\": 1,\r\n            \"discount\": 10\r\n        }\r\n    },\r\n    \"from\": \"2024-11-02\",\r\n    \"to\": \"2024-11-03\",\r\n    \"usageLimit\": 100,\r\n    \"perUserLimit\": 2,\r\n    \"logonAdd\": \"Nitesh\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/coupons",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"coupons"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "GetApplicable",
+			"item": [
+				{
+					"name": "New Request",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Rough Req",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		}
+	]
+}
