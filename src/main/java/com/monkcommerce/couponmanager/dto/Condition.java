@@ -21,5 +21,12 @@ public class Condition {
 	// condition for productWise
 	private ProductDto productWise;
 	// and other type of coupons
+	
+	public Condition(Integer discountType,Integer discount,Integer discMax,Integer minVal) {
+		this.discountType=discountType;
+		this.discount=discount;
+		this.discMax=discMax;
+		this.minVal=minVal;
+	}
 
 }

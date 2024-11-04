@@ -11,8 +11,8 @@ import com.monkcommerce.couponmanager.util.CouponSqlQueries;
 
 public interface CouponRepository extends JpaRepository<Coupon, Long> {
 
-	@Query(value=CouponSqlQueries.GET_APPLICABLE_COUPONS,nativeQuery=true)
-	List<Coupon> getApplicableCoupons(Integer cartValue, List<Long> productList);
+//	@Query(value=CouponSqlQueries.GET_APPLICABLE_COUPONS,nativeQuery=true)
+//	List<Coupon> getApplicableCoupons(Integer cartValue, List<Long> productList);
 //			, List<ProductDto> bogo);
 
 }
