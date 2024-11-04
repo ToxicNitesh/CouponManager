@@ -61,7 +61,7 @@ public class CouponServiceImpl implements CouponService {
 		try {
 			Coupon coupon = new Coupon();
 			// considering only one type of coupon can be added
-			Map<Boolean,String> isValid=validateCondition(couponDto);
+			Map<Boolean, String> isValid = validateCondition(couponDto);
 			if (isValid.containsKey(true)) {
 				if (couponDto.getId() != null) {
 					logger.info("Updating the coupon");
@@ -95,7 +95,7 @@ public class CouponServiceImpl implements CouponService {
 					couponRepository.save(coupon);
 				}
 				response.put(isUpdate ? AppConstants.UPDATE : AppConstants.CREATE, AppConstants.SUCCESS);
-			}else {
+			} else {
 				response.put(AppConstants.FAIL, isValid.get(false));
 			}
 		} catch (Exception e) {
@@ -105,16 +105,14 @@ public class CouponServiceImpl implements CouponService {
 		return response;
 	}
 
-	private Map<Boolean,String> validateCondition(CouponDto couponDto) {
+	private Map<Boolean, String> validateCondition(CouponDto couponDto) {
 		// TODO Auto-generated method stub
-		Map<Boolean,String> response=new HashMap<>();
+		Map<Boolean, String> response = new HashMap<>();
 		response.put(true, null);
 		/*
-		 * if the type of coupon is BOGO then
-		 * 		if all the free products are present in the application then
-		 * 				get the price of each product and append to the productDto
-		 * 		else
-		 * 			return coupon is invalid since product is not present
+		 * if the type of coupon is BOGO then if all the free products are present in
+		 * the application then get the price of each product and append to the
+		 * productDto else return coupon is invalid since product is not present
 		 * 
 		 *
 		 */
@@ -172,12 +170,11 @@ public class CouponServiceImpl implements CouponService {
 		 */
 		Gson json = new Gson();
 		Double cartValue = 0.0;
-		Set<Long> productList = new HashSet<>();
 		Map<Long, Integer> productMap = new HashMap<>();
 		List<CouponDto> response = new ArrayList<>();
 
 		for (ProductDto product : cart.getProducts()) {
-			cartValue += (product.getPrice()*product.getQuantity());
+			cartValue += (product.getPrice() * product.getQuantity());
 			productMap.put(product.getId(), product.getQuantity());
 
 		}
@@ -185,21 +182,21 @@ public class CouponServiceImpl implements CouponService {
 		for (Coupon coupon : couponList) {
 			Double discount = 0.0;
 			logger.info(coupon.getCondition());
-			String s=coupon.getCondition();
+			String s = coupon.getCondition();
 			logger.info("");
 			logger.info(coupon.getCondition().toString());
 			ObjectMapper om = new ObjectMapper();
-			Condition condition =null;
+			Condition condition = null;
 			try {
-			condition = om.readValue(s, Condition.class);
-			}catch (Exception e) {
+				condition = om.readValue(s, Condition.class);
+			} catch (Exception e) {
 				logger.error("error ");
 			}
 //			Condition condition = json.fromJson(coupon.getCondition().toString(), Condition.class);
 			boolean isEligible = false;
 			CouponDto dto = new CouponDto();
 			dto.setId(coupon.getCouponId());
-			if (condition.getBxgy() != null) {
+			if (condition.getBxgy() != null && coupon.getCouponType() == AppConstants.BXGY_COUPON_TYPE) {
 				List<ProductDto> buyList = condition.getBxgy().get("buy");
 				List<ProductDto> getList = condition.getBxgy().get("get");
 				boolean canApply = true;
@@ -227,43 +224,62 @@ public class CouponServiceImpl implements CouponService {
 					}
 				}
 			}
-			if (condition.getMinVal() != null) {
-				if (condition.getMinVal() < cartValue) {
+			if (coupon.getCouponType() == AppConstants.CARTWISE_COUPON_TYPE) {
+				dto.setType("CARTWISE");
+				if (condition.getMinVal() != null) {
+					if (condition.getMinVal() < cartValue) {
+						isEligible = true;
+						logger.info("min value coupon can be applied");
+						if (condition.getDiscountType().equals(AppConstants.DISCOUNT_TYPE_AMOUNT)) {
+							logger.info("discoun type is amount");
+							discount += condition.getDiscount();
+						} else {
+							logger.info("discoun type is percent");
+							discount = (cartValue * condition.getDiscount()) / 100;
+							if (discount > condition.getDiscMax()) {
+								discount = condition.getDiscMax().doubleValue();
+							}
+							
+						}
+					}
+				} else {
 					isEligible = true;
 					logger.info("min value coupon can be applied");
 					if (condition.getDiscountType().equals(AppConstants.DISCOUNT_TYPE_AMOUNT)) {
 						logger.info("discoun type is amount");
 						discount += condition.getDiscount();
-						dto.setType("CARTWISE");
-						dto.setDiscount(discount);
+						
 					} else {
 						logger.info("discoun type is percent");
 						discount = (cartValue * condition.getDiscount()) / 100;
 						if (discount > condition.getDiscMax()) {
 							discount = condition.getDiscMax().doubleValue();
 						}
-						dto.setType("CARTWISE");
-						dto.setDiscount(discount);
+						
 					}
+
 				}
+				dto.setDiscount(discount);
 			}
-			if (condition.getProductWise() != null) {
-				ProductDto product = condition.getProductWise();
-				if (productMap.containsKey(product.getId())) {
-					isEligible = true;
-					if (product.getDiscType().equals(AppConstants.DISCOUNT_TYPE_AMOUNT)) {
-						logger.info("discoun type is amount");
-						discount += product.getDiscount();
-						dto.setType("PRODUCTWISE");
-						dto.setDiscount(discount);
-					} else {
-						logger.info("discoun type is percent");
-						discount = (cartValue * product.getDiscount()) / 100;
-						if (discount > product.getDiscMax()) {
-							discount = condition.getDiscMax().doubleValue();
+			if (coupon.getCouponType() == AppConstants.PRODUCTWISE_COUPON_TYPE) {
+				if (condition.getProductWise() != null) {
+					ProductDto product = condition.getProductWise();
+					if (productMap.containsKey(product.getId())) {
+						isEligible = true;
+						if (product.getDiscType().equals(AppConstants.DISCOUNT_TYPE_AMOUNT)) {
+							logger.info("discoun type is amount");
+							discount += product.getDiscount();
+							dto.setType("PRODUCTWISE");
+							dto.setDiscount(discount);
+						} else {
+							logger.info("discoun type is percent");
+							discount = (cartValue * product.getDiscount()) / 100;
+							if (discount > product.getDiscMax()) {
+								discount = condition.getDiscMax().doubleValue();
+							}
+							dto.setType("PRODUCTWISE");
+							dto.setDiscount(discount);
 						}
-						dto.setType("PRODUCTWISE");
-						dto.setDiscount(discount);
 					}
 				}
 			}
