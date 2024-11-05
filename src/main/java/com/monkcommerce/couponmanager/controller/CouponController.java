@@ -51,14 +51,18 @@ public class CouponController {
 	@PostMapping("/applicable-coupons")
 	public List<CouponDto> couponsAvailableForCart(@RequestBody Cart cart) {
 		
-		return couponService.getApplicableCoupons(cart);
+		return couponService.getApplicableCoupons(cart,null);
 	}
 	
-	@PostMapping("/apply-coupon")
-	public String applyCouponOnCart(@RequestBody String entity) {
-		//TODO: process POST request
-		
-		return entity;
+	@PostMapping("/apply-coupon/{id}")
+	public Cart applyCouponOnCart(@RequestBody Cart cart,@PathVariable Long id) {
+		List<CouponDto> coupon=couponService.getApplicableCoupons(cart,id);
+		if(coupon!=null&& coupon.size()!=0) {
+		cart.setDisc(coupon.get(0).getDiscount());
+		cart.setTotal(coupon.get(0).getTotal());
+		cart.setFinalPrice(cart.getTotal()-cart.getDisc());
+		}
+		return cart;
 	}
 	
 	

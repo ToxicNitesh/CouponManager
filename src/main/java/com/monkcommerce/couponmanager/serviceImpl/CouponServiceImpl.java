@@ -3,12 +3,14 @@ package com.monkcommerce.couponmanager.serviceImpl;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -85,6 +87,7 @@ public class CouponServiceImpl implements CouponService {
 					// else add a new record in type table and set the coupon type to int
 
 					coupon.setCouponCode(couponDto.getCode());
+					
 					coupon.setCouponType(cp.getId());
 
 					coupon.setCondition(json.toJson(couponDto.getConditon()));
@@ -108,6 +111,10 @@ public class CouponServiceImpl implements CouponService {
 	private Map<Boolean, String> validateCondition(CouponDto couponDto) {
 		// TODO Auto-generated method stub
 		Map<Boolean, String> response = new HashMap<>();
+		if(couponDto.getType()==null) {
+			response.put(false , response.getOrDefault(false, "")+" coupon type cannot be empty ::");
+		}
+		//other conditions
 		response.put(true, null);
 		/*
 		 * if the type of coupon is BOGO then if all the free products are present in
@@ -146,25 +153,8 @@ public class CouponServiceImpl implements CouponService {
 		return response;
 	}
 
-	@Override
-//	public List<CouponDto> getApplicableCoupons(Cart cart) {
-//		/*
-//		 * sort coupons based on highest discount
-//		 */
-//		Integer cartValue = 0;
-//		List<Long> productList = new ArrayList<>();
-//		List<String> bogo = new ArrayList<>();
-//		for (ProductDto product : cart.getProducts()) {
-//			cartValue += product.getPrice();
-//			productList.add(product.getId());
-//			bogo.add(product.getId() + "" + product.getQuantity());
-//
-//		}
-//		List<Coupon> applicableCoupons = couponRepository.getApplicableCoupons(cartValue, productList);
-//		return null;
-//	}
-
-	public List<CouponDto> getApplicableCoupons(Cart cart) {
+	
+	public List<CouponDto> getApplicableCoupons(Cart cart,Long id) {
 		/*
 		 * sort coupons based on highest discount
 		 */
@@ -178,7 +168,16 @@ public class CouponServiceImpl implements CouponService {
 			productMap.put(product.getId(), product.getQuantity());
 
 		}
-		List<Coupon> couponList = couponRepository.findAll();
+		List<Coupon> couponList=null;
+		if(id==null) {
+			 couponList = couponRepository.findAll();
+		}else {
+			Optional<Coupon> c= couponRepository.findById(id);
+			 couponList =new ArrayList<>();
+			 if(c.isPresent()) {
+				 couponList.add(c.get());
+			 }
+		}
 		for (Coupon coupon : couponList) {
 			Double discount = 0.0;
 			logger.info(coupon.getCondition());
@@ -190,7 +189,9 @@ public class CouponServiceImpl implements CouponService {
 			dto.setId(coupon.getCouponId());
 			List<CouponType>typeList=couponTypeRepository.findAll();
 			Map<Long, String>couponTypeMap=couponUtil.convertListToMap(typeList);
-			if (condition.getBxgy() != null && couponTypeMap.get(coupon.getCouponType()).equalsIgnoreCase(AppConstants.BXGY_COUPON_TYPE)) {
+			if (condition.getBxgy() != null && (couponTypeMap.get(coupon.getCouponType()).
+					equalsIgnoreCase(AppConstants.BXGY_COUPON_TYPE)||(couponTypeMap.get(coupon.getCouponType()).
+							equalsIgnoreCase(AppConstants.COMBINATIONAL)))) {
 				List<ProductDto> buyList = condition.getBxgy().get("buy");
 				List<ProductDto> getList = condition.getBxgy().get("get");
 				boolean canApply = true;
@@ -218,7 +219,7 @@ public class CouponServiceImpl implements CouponService {
 					}
 				}
 			}
-			else if (couponTypeMap.get(coupon.getCouponType()).equalsIgnoreCase( AppConstants.CARTWISE_COUPON_TYPE)) {
+			 if (couponTypeMap.get(coupon.getCouponType()).equalsIgnoreCase( AppConstants.CARTWISE_COUPON_TYPE)) {
 				dto.setType("CARTWISE");
 				if (condition.getMinVal() != null) {
 					if (condition.getMinVal() < cartValue) {
@@ -255,7 +256,7 @@ public class CouponServiceImpl implements CouponService {
 				}
 				dto.setDiscount(discount);
 			}
-			else if (couponTypeMap.get(coupon.getCouponType()).equalsIgnoreCase( AppConstants.PRODUCTWISE_COUPON_TYPE)) {
+			 if (couponTypeMap.get(coupon.getCouponType()).equalsIgnoreCase( AppConstants.PRODUCTWISE_COUPON_TYPE)) {
 				if (condition.getProductWise() != null) {
 					ProductDto product = condition.getProductWise();
 					if (productMap.containsKey(product.getId())) {
@@ -278,6 +279,7 @@ public class CouponServiceImpl implements CouponService {
 				}
 			}
 			if (isEligible) {
+				dto.setTotal(cartValue);
 				response.add(dto);
 			}
 		}
@@ -285,4 +287,5 @@ public class CouponServiceImpl implements CouponService {
 		return response;
 	}
 
+	
 }

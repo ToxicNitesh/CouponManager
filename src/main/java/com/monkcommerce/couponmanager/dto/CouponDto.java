@@ -21,6 +21,7 @@ public class CouponDto {
 	private Long logonAdd;
 	
 	private Double discount;
+	private Double total;
 	public CouponDto(Long id,String type,Double discount) {
 		/*
 		 * using this constructor to return applicable coupons

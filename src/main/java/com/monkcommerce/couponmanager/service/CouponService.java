@@ -17,5 +17,5 @@ public interface CouponService {
 
 	public Map<String, String> deleteCoupon(Long id);
 
-	public List<CouponDto> getApplicableCoupons(Cart cart);
+	public List<CouponDto> getApplicableCoupons(Cart cart,Long couponId);
 }

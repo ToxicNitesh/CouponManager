@@ -14,5 +14,6 @@ public interface AppConstants {
 	public static String PRODUCTWISE_COUPON_TYPE = "Product-wise";
 	public static String CARTWISE_COUPON_TYPE = "Cart-wise";
 	public static String BXGY_COUPON_TYPE = "Bxgy";
+	public static String COMBINATIONAL = "Combinational";
 
 }
