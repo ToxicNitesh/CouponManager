@@ -182,21 +182,15 @@ public class CouponServiceImpl implements CouponService {
 		for (Coupon coupon : couponList) {
 			Double discount = 0.0;
 			logger.info(coupon.getCondition());
-			String s = coupon.getCondition();
-			logger.info("");
-			logger.info(coupon.getCondition().toString());
-			ObjectMapper om = new ObjectMapper();
 			Condition condition = null;
-			try {
-				condition = om.readValue(s, Condition.class);
-			} catch (Exception e) {
-				logger.error("error ");
-			}
-//			Condition condition = json.fromJson(coupon.getCondition().toString(), Condition.class);
+			String cleanJson = coupon.getCondition().replace("\"", "").replaceAll("\\\\", "");;
+			 condition = json.fromJson(cleanJson, Condition.class);
 			boolean isEligible = false;
 			CouponDto dto = new CouponDto();
 			dto.setId(coupon.getCouponId());
-			if (condition.getBxgy() != null && coupon.getCouponType() == AppConstants.BXGY_COUPON_TYPE) {
+			List<CouponType>typeList=couponTypeRepository.findAll();
+			Map<Long, String>couponTypeMap=couponUtil.convertListToMap(typeList);
+			if (condition.getBxgy() != null && couponTypeMap.get(coupon.getCouponType()).equalsIgnoreCase(AppConstants.BXGY_COUPON_TYPE)) {
 				List<ProductDto> buyList = condition.getBxgy().get("buy");
 				List<ProductDto> getList = condition.getBxgy().get("get");
 				boolean canApply = true;
@@ -224,7 +218,7 @@ public class CouponServiceImpl implements CouponService {
 					}
 				}
 			}
-			if (coupon.getCouponType() == AppConstants.CARTWISE_COUPON_TYPE) {
+			else if (couponTypeMap.get(coupon.getCouponType()).equalsIgnoreCase( AppConstants.CARTWISE_COUPON_TYPE)) {
 				dto.setType("CARTWISE");
 				if (condition.getMinVal() != null) {
 					if (condition.getMinVal() < cartValue) {
@@ -244,7 +238,7 @@ public class CouponServiceImpl implements CouponService {
 					}
 				} else {
 					isEligible = true;
-					logger.info("min value coupon can be applied");
+					logger.info("  coupon can be applied as there is no minimum value");
 					if (condition.getDiscountType().equals(AppConstants.DISCOUNT_TYPE_AMOUNT)) {
 						logger.info("discoun type is amount");
 						discount += condition.getDiscount();
@@ -261,7 +255,7 @@ public class CouponServiceImpl implements CouponService {
 				}
 				dto.setDiscount(discount);
 			}
-			if (coupon.getCouponType() == AppConstants.PRODUCTWISE_COUPON_TYPE) {
+			else if (couponTypeMap.get(coupon.getCouponType()).equalsIgnoreCase( AppConstants.PRODUCTWISE_COUPON_TYPE)) {
 				if (condition.getProductWise() != null) {
 					ProductDto product = condition.getProductWise();
 					if (productMap.containsKey(product.getId())) {

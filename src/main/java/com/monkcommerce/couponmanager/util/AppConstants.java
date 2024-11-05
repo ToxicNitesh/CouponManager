@@ -11,8 +11,8 @@ public interface AppConstants {
 	public static String SUCCESS = "success";
 	public static String DELETE = "delete";
 	public static String INVALID_COUPON = "Coupon is not present in System";
-	public static Long PRODUCTWISE_COUPON_TYPE = null;
-	public static Long CARTWISE_COUPON_TYPE = null;
-	public static Long BXGY_COUPON_TYPE = null;
+	public static String PRODUCTWISE_COUPON_TYPE = "Product-wise";
+	public static String CARTWISE_COUPON_TYPE = "Cart-wise";
+	public static String BXGY_COUPON_TYPE = "Bxgy";
 
 }

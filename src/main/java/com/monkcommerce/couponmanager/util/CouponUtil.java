@@ -1,10 +1,13 @@
 package com.monkcommerce.couponmanager.util;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Component;
 
 import com.monkcommerce.couponmanager.dto.ProductDto;
+import com.monkcommerce.couponmanager.entity.CouponType;
 
 @Component
 public class CouponUtil {
@@ -16,5 +19,9 @@ public class CouponUtil {
 			discount+=dto.getPrice();
 		}
 		return discount;
+	}
+
+	public Map<Long, String> convertListToMap(List<CouponType> typeList) {
+		return typeList.stream().collect(Collectors.toMap(CouponType::getId, CouponType::getCouponType));
 	}
 }
