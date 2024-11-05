@@ -1,9 +1,8 @@
 {
 	"info": {
-		"_postman_id": "e1ecd343-2c98-4cc8-9123-8f829312e16b",
+		"_postman_id": "c361b46e-1fdc-456a-890f-81caef0fc688",
 		"name": "Coupon Management Apis",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "39453478"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
@@ -44,7 +43,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"id\":1,\r\n    \"code\": \"FLAT50\",\r\n    \"type\": \"Cart-wise\",\r\n    \"conditon\": {\r\n        \"discountType\": 1,\r\n        \"discount\": 50,\r\n        \"discMax\": 50\r\n        \r\n    },\r\n    \"from\": \"2024-11-02\",\r\n    \"to\": \"2024-11-03\",\r\n    \"usageLimit\": 100,\r\n    \"perUserLimit\": 2,\r\n    \"logonAdd\": 1\r\n}",
+							"raw": "{\r\n    \"code\": \"FLAT50\",\r\n    \"type\": \"Cart-wise\",\r\n    \"conditon\": {\r\n        \"discountType\": 1,\r\n        \"discount\": 50,\r\n        \"discMax\": 50\r\n        \r\n    },\r\n    \"from\": \"2024-11-02\",\r\n    \"to\": \"2024-11-03\",\r\n    \"usageLimit\": 100,\r\n    \"perUserLimit\": 2,\r\n    \"logonAdd\": 1\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -175,7 +174,10 @@
 					"name": "DeleteById",
 					"request": {
 						"method": "GET",
-						"header": []
+						"header": [],
+						"url": {
+							"raw": ""
+						}
 					},
 					"response": []
 				}
@@ -302,10 +304,66 @@
 			"name": "GetApplicable",
 			"item": [
 				{
-					"name": "New Request",
+					"name": "Get Applicable",
 					"request": {
-						"method": "GET",
-						"header": []
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"products\": [\r\n        {\r\n            \"id\": 1,\r\n            \"quantity\": 1,\r\n            \"price\": 1000\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/coupons/applicable-coupons",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"coupons",
+								"applicable-coupons"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "applyCoupon",
+			"item": [
+				{
+					"name": "Get Applicable",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"products\": [\r\n        {\r\n            \"id\": 1,\r\n            \"quantity\": 1,\r\n            \"price\": 1000\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/coupons/apply-coupon/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"coupons",
+								"apply-coupon",
+								"1"
+							]
+						}
 					},
 					"response": []
 				}
@@ -315,7 +373,10 @@
 			"name": "Rough Req",
 			"request": {
 				"method": "GET",
-				"header": []
+				"header": [],
+				"url": {
+					"raw": ""
+				}
 			},
 			"response": []
 		}
